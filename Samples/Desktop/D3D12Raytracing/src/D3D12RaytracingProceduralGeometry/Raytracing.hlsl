@@ -23,7 +23,7 @@
 
 // Scene wide resources.
 //  g_* - bound via a global root signature.
-//  l_* - bound via a local root signature.
+//  l_* - bound via a local root signature.a
 RaytracingAccelerationStructure g_scene : register(t0, space0);
 RWTexture2D<float4> g_renderTarget : register(u0);
 ConstantBuffer<SceneConstantBuffer> g_sceneCB : register(b0);
@@ -109,7 +109,7 @@ float4 TraceRadianceRay(in Ray ray, in UINT currentRayRecursionDepth)
     // Set TMin to a zero value to avoid aliasing artifacts along contact areas.
     // Note: make sure to enable face culling so as to avoid surface face fighting.
     rayDesc.TMin = 0;
-    rayDesc.TMax = 10000;
+    rayDesc.TMax = 20;//* sqrt(pow(rayDesc.Direction.x, 2) + pow(rayDesc.Direction.y, 2) + pow(rayDesc.Direction.z, 2)) * cos(abs(atan(sqrt(pow(rayDesc.Direction.x, 2) + pow(rayDesc.Direction.y, 2)) / rayDesc.Direction.z)));
     RayPayload rayPayload = { float4(0, 0, 0, 0), currentRayRecursionDepth + 1 };
     TraceRay(g_scene,
         RAY_FLAG_CULL_BACK_FACING_TRIANGLES,
